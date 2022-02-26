@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { getEventById, DUMMY_EVENTS } from "../../../dummy-data";
+import { DUMMY_EVENTS } from "../../../dummy-data";
 import {
   Text,
   Box,
@@ -14,28 +14,33 @@ import { FaRegCalendarMinus } from "react-icons/fa";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 
 const SingleEvent = () => {
-  // Getting query ID from the route hook
   const router = useRouter();
   const queryId = router.query.singleEvent;
-  const data = DUMMY_EVENTS
-  // Filter the events by ID (import the utility function from dummy data)
- 
-  const event = data.find((element) => element.id === Number(queryId))
+  const dummy = DUMMY_EVENTS;
+  const [data, setData] = useState([])
   
-  const { date } = event;
+  
+  useEffect(() => {
+    if (router.isReady) {
+        const event = dummy.find((element) => element.id === Number(queryId)) || [];
+        setData(event)
+      }             
+    },[router.isReady])
+    
+    if (data.length === 0) {
+      return <Text>No event found!</Text>;
+    }
+
+  const { date } = data;
+
   const readableDate = new Date(date).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
-  
-
-  if (!event) {
-    return <Text>No event found!</Text>;
-  }
 
   return (
-    <>    
+    <>
       <Center w="100%" h="25vh" bgGradient="linear(to-tr, green.200, teal.600)">
         <Text
           fontSize="6xl"
@@ -57,8 +62,8 @@ const SingleEvent = () => {
         alignItems="center"
       >
         <Image
-          src={event.image}
-          alt={event.title}
+          src={data.image}
+          alt={data.title}
           boxSize="15rem"
           objectFit="cover"
           borderRadius="full"
@@ -77,7 +82,7 @@ const SingleEvent = () => {
             <Box>
               <HiOutlineLocationMarker color="#81E6D9" size="24" />
               <Text mt="0.5rem" color="teal.200">
-                {event.location}
+                {data.location}
               </Text>
             </Box>
           </Stack>
@@ -86,7 +91,7 @@ const SingleEvent = () => {
       <Center>
         <Container w="45rem">
           <Text mt="2rem" align="center">
-            {event.description}
+            {data.description}
           </Text>
         </Container>
       </Center>

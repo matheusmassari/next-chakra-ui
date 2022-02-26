@@ -1,10 +1,17 @@
-import { getAllEvents, DUMMY_EVENTS } from "../../../dummy-data";
+import { getAllEvents } from "../../../dummy-data";
 import { Text } from "@chakra-ui/react";
+import EventList from "../../../components/events/EventList";
+import SearchEvents from "../../../components/events/SearchEvents";
 
 const AllEvents = () => {
-  const data = getAllEvents();
+  const allEvents = getAllEvents();
 
-  return <Text>All events page</Text>;
+  return (
+    <>
+      <SearchEvents />
+      <EventList events={allEvents} />
+    </>
+  );
 };
 
 export default AllEvents;

@@ -10,7 +10,6 @@ export default function Home() {
     return DUMMY_EVENTS.filter((event) => event.isFeatured);
   }
   const featuredEvents = getFeaturedEvents()
-  console.log(featuredEvents);
   
 
   return (
@@ -21,7 +20,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>        
-        <EventList featuredEvents={featuredEvents} />
+        <EventList events={featuredEvents} />
       </div>
     </>
   );
