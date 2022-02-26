@@ -1,9 +1,10 @@
-import React from 'react'
+import { getAllEvents, DUMMY_EVENTS } from "../../../dummy-data";
+import { Text } from "@chakra-ui/react";
 
 const AllEvents = () => {
-  return (
-    <div>AllEvents</div>
-  )
-}
+  const data = getAllEvents();
 
-export default AllEvents
+  return <Text>All events page</Text>;
+};
+
+export default AllEvents;

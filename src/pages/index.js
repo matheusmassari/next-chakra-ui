@@ -1,10 +1,17 @@
 import Head from 'next/head'
 import Link from "next/link";
-import { getFeaturedEvents } from "../../dummy-data";
+import { DUMMY_EVENTS } from "../../dummy-data";
 import EventList from "../../components/events/EventList";
 
 export default function Home() {
-  const featuredEvents = getFeaturedEvents();
+ 
+  const getFeaturedEvents = () => {
+    console.log(DUMMY_EVENTS)
+    return DUMMY_EVENTS.filter((event) => event.isFeatured);
+  }
+  const featuredEvents = getFeaturedEvents()
+  console.log(featuredEvents);
+  
 
   return (
     <>

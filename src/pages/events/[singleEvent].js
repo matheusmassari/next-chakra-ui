@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { getEventById } from "../../../dummy-data";
+import { getEventById, DUMMY_EVENTS } from "../../../dummy-data";
 import {
   Text,
   Box,
@@ -17,9 +17,18 @@ const SingleEvent = () => {
   // Getting query ID from the route hook
   const router = useRouter();
   const queryId = router.query.singleEvent;
-
+  const data = DUMMY_EVENTS
   // Filter the events by ID (import the utility function from dummy data)
-  const event = getEventById(queryId);
+ 
+  const event = data.find((element) => element.id === Number(queryId))
+  
+  const { date } = event;
+  const readableDate = new Date(date).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  
 
   if (!event) {
     return <Text>No event found!</Text>;
@@ -48,7 +57,7 @@ const SingleEvent = () => {
         alignItems="center"
       >
         <Image
-          src={`../../${event.image}`}
+          src={event.image}
           alt={event.title}
           boxSize="15rem"
           objectFit="cover"
@@ -62,7 +71,7 @@ const SingleEvent = () => {
             <Box>
               <FaRegCalendarMinus color="#81E6D9" size="22" />
               <Text mt="0.5rem" color="teal.200">
-                {event.date}
+                {readableDate}
               </Text>
             </Box>
             <Box>

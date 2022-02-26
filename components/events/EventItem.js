@@ -1,15 +1,8 @@
 import React from "react";
-import {
-  Flex,
-  Center,
-  Text,
-  Image,
-  Stack,
-  Heading,
-  Button,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Flex, Center, Text, Image, Container } from "@chakra-ui/react";
 import Link from "next/link";
+import { BsLink45Deg } from "react-icons/bs";
+
 const EventItem = (props) => {
   const { title, image, date, location, id } = props;
   const readableDate = new Date(date).toLocaleDateString("en-US", {
@@ -17,81 +10,58 @@ const EventItem = (props) => {
     month: "long",
     year: "numeric",
   });
-  const formattedLocation = location.split(",");
+  // const formattedLocation = location.split(",");
   const exploreLink = `/events/${id}`;
-  console.log(formattedLocation);
 
   return (
-    <Center my={4}>
-      <Stack
-        borderWidth="1px"
-        borderRadius="lg"
-        w={{ sm: "35rem", md: "35rem" }}
-        h={{ sm: "15rem", md: "15rem" }}
-        direction={{ base: "column", md: "row" }}
-        bg={useColorModeValue("white", "gray.900")}
-        boxShadow={"md"}
+    <Center>
+      <Box
+        mt="2rem"
+        w="35rem"
+        h="15rem"
+        border="1px"
+        borderColor="gray.300"
+        bgColor="gray.200"
+        borderRadius="8px"
+        shadow="lg"
       >
-        <Flex flex={0.5}>
+        <Box h="100%" display="flex">
           <Image
-            objectFit="cover"
-            boxSize="15rem"
-            align="center"
             src={image}
-            alt="event image"
-            borderTopLeftRadius="lg"
-            borderBottomLeftRadius="lg"
+            h="100%"
+            w="15rem"
+            objectFit="cover"
+            borderLeftRadius="8px"
+            alt={title}
           />
-        </Flex>
-        <Stack flex={1} py={4} justifyContent="space-between">
-          <Stack>
-            <Heading fontSize={"2xl"} fontFamily={"body"}>
-              {title}
-            </Heading>
-            <Text
-              textAlign={"left"}
-              color={useColorModeValue("gray.500", "gray.400")}
-              pt={1}
-              pr={1}
-              fontWeight="bold"
-            >
-              {readableDate}
+          <Box ml="1rem" mt="1rem">
+            <Text fontSize="1.25rem" fontWeight="600">
+              {title.slice(0, 25) + "..."}
             </Text>
-            <Stack spacing="1px">
-              <Text
-                as="i"
-                textAlign={"left"}
-                color={useColorModeValue("gray.700", "gray.400")}
-                pt={1}
-                pr={1}
-              >
-                {formattedLocation[0]}
-              </Text>
-              <Text
-                as="i"
-                textAlign={"left"}
-                color={useColorModeValue("gray.700", "gray.400")}
-                pt={1}
-                pr={1}
-              >
-                {formattedLocation[1]}
-              </Text>
-            </Stack>
-          </Stack>
-          <Button
-            flex={0.4}
-            fontSize={"sm"}
-            w="10rem"
-            height="2rem"
-            rounded={"full"}
-            _focus={{
-              bg: "gray.200",
-            }}
-          >
-            <Link href={exploreLink}>Explore Event</Link>
-          </Button>
-        </Stack>
-      </Stack>
+            <Text mt="1rem">{readableDate}</Text>
+            <Flex mt="1rem" direction="column">
+              <Text as="i">{location}</Text>
+            </Flex>
+            <Flex mt="4.5rem" ml="12rem" alignItems="center">
+              <BsLink45Deg
+                size="24"
+                color="#319795
+"
+              />
+              <Link href={exploreLink}>
+                <Text
+                  ml="0.5rem"
+                  as="a"
+                  color="teal.500"
+                  _hover={{ cursor: "pointer" }}
+                >
+                  Explore
+                </Text>
+              </Link>
+            </Flex>
+          </Box>
+        </Box>
+      </Box>
     </Center>
   );
 };
