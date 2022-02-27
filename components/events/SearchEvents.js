@@ -11,11 +11,28 @@ import {
   Button,
   Select,
 } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
 
 const SearchEvents = (props) => {
+  const { onSearch } = props;
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const onSubmit = (data) => onSearch(data.year, data.month);
+
   return (
     <Center mt="2rem">
-      <Box h="4.2rem" w="36rem" bgColor="gray.300" borderRadius="4px" py="0.5rem" shadow="base">
+      <Box
+        h="4.2rem"
+        w="36rem"
+        bgColor="gray.300"
+        borderRadius="4px"
+        py="0.5rem"
+        shadow="base"
+      >
         <FormControl>
           <Flex alignItems="center" ml="2rem">
             <FormLabel
@@ -26,7 +43,14 @@ const SearchEvents = (props) => {
             >
               Year:
             </FormLabel>
-            <Select id="year" type="number" w="6rem" bgColor="white">
+            <Select
+              id="year"
+              type="number"
+              w="6rem"
+              bgColor="white"
+              defaultValue="2022"
+              {...register("year")}
+            >
               <option value="2022">2022</option>
               <option value="2021">2021</option>
             </Select>
@@ -39,21 +63,33 @@ const SearchEvents = (props) => {
               >
                 Month:
               </FormLabel>
-              <Select id="month" type="number" w="8rem" bgColor="white">
-                <option value="january">January</option>
-                <option value="february">February</option>
-                <option value="mars">Mars</option>
-                <option value="april">April</option>
-                <option value="may">May</option>
-                <option value="june">June</option>
-                <option value="july">July</option>
-                <option value="august">August</option>
-                <option value="september">September</option>
-                <option value="october">October</option>
-                <option value="november">November</option>
-                <option value="december">December</option>
+              <Select
+                id="month"
+                type="number"
+                w="8rem"
+                bgColor="white"
+                defaultValue="january"
+                {...register("month")}
+              >
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">Mars</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
               </Select>
-              <Button type="submit" colorScheme="teal" ml="2rem">
+              <Button
+                type="submit"
+                colorScheme="teal"
+                ml="2rem"
+                onClick={handleSubmit(onSubmit)}
+              >
                 Find
               </Button>
             </Flex>
