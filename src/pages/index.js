@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { DUMMY_EVENTS } from "../../dummy-data";
 import EventList from "../../components/events/EventList";
-import { getFeaturedEvents } from "../../helpers/api-utils";
+import { getFeaturedEvents, getAllEvents } from "../../helpers/api-utils";
 
 export default function Home(props) {
   return (
@@ -20,10 +20,12 @@ export default function Home(props) {
 
 export async function getStaticProps() {
   const featuredEvents = await getFeaturedEvents();
+  
 
   return {
     props: {
       featuredEvents: featuredEvents
-    }
+    },
+    revalidate : 1800
   }
 }

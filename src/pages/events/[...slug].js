@@ -1,42 +1,14 @@
 import React from "react";
-import { useRouter } from "next/router";
 import { Text, Center, Spinner, Button } from "@chakra-ui/react";
 import Link from "next/link";
-import { getFilteredEvents } from "../../../dummy-data";
+import { getFilteredEvents } from "../../../helpers/api-utils";
 import EventList from "../../../components/events/EventList";
 
-const FilteredEventsPage = () => {
-  const router = useRouter();
-  const filterData = router.query.slug;
-
-  // LOADING STATE
-  if (!filterData) {
-    return (
-      <Center h="80vh" w="100vw">
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="teal.500"
-          size="xl"
-        />
-      </Center>
-    );
-  }
-
-  // GETTING VALUES FROM QUERY
-  const filteredYear = Number(filterData[0]);
-  const filteredMonth = Number(filterData[1]);
-
+const FilteredEventsPage = (props) => {
+  const { filteredEvents } = props;
+  
   // QUERY ERROR CASE
-  if (
-    isNaN(filteredYear) ||
-    isNaN(filteredMonth) ||
-    filteredYear > 2030 ||
-    filteredYear < 2021 ||
-    filteredMonth < 1 ||
-    filteredMonth > 12
-  ) {
+  if (props.hasError) {
     return (
       <Center h="80vh" w="100vw" display="flex" flexDirection="column">
         <Text fontSize="4xl" color="teal.700">
@@ -57,12 +29,6 @@ const FilteredEventsPage = () => {
     );
   }
 
-  // CORRECT QUERY CASE
-  const filteredEvents = getFilteredEvents({
-    year: filteredYear,
-    month: filteredMonth,
-  }); // -> array that might be empty
-  
   // FALSY RESPONSE CASE
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
@@ -85,9 +51,41 @@ const FilteredEventsPage = () => {
     );
   }
 
-  return (
-    <EventList events={filteredEvents} />
-  )
+  return <EventList events={filteredEvents} />;
 };
+
+export async function getServerSideProps(context) {
+  const {
+    params: { slug },
+  } = context;
+  const filteredYear = Number(slug[0]);
+  const filteredMonth = Number(slug[1]);
+  if (
+    isNaN(filteredYear) ||
+    isNaN(filteredMonth) ||
+    filteredYear > 2030 ||
+    filteredYear < 2021 ||
+    filteredMonth < 1 ||
+    filteredMonth > 12
+  ) {
+    return {
+      props: {
+        hasError: true,
+      },
+    };
+  }
+
+  const filteredEvents = await getFilteredEvents({
+    year: filteredYear,
+    month: filteredMonth,
+  });
+
+  
+  return {
+    props: {
+      filteredEvents: filteredEvents,
+    },
+  };
+}
 
 export default FilteredEventsPage;

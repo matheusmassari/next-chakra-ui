@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Center, Text, Image, Container } from "@chakra-ui/react";
+import { Box, Flex, Center, Text, Image } from "@chakra-ui/react";
 import Link from "next/link";
 import { BsLink45Deg } from "react-icons/bs";
 
@@ -10,7 +10,6 @@ const EventItem = (props) => {
     month: "long",
     year: "numeric",
   });
-  // const formattedLocation = location.split(",");
   const exploreLink = `/events/${id}`;
 
   return (
@@ -48,7 +47,7 @@ const EventItem = (props) => {
                 color="#319795
 "
               />
-              <Link href={exploreLink}>
+              <Link href={exploreLink} passHref>
                 <Text
                   ml="0.5rem"
                   as="a"

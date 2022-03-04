@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { DUMMY_EVENTS } from "../../../dummy-data";
+import React from "react";
+import { getEventById, getAllEvents } from "../../../helpers/api-utils";
+import { FaRegCalendarMinus } from "react-icons/fa";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 import {
   Text,
   Box,
@@ -10,29 +11,9 @@ import {
   Stack,
   Container,
 } from "@chakra-ui/react";
-import { FaRegCalendarMinus } from "react-icons/fa";
-import { HiOutlineLocationMarker } from "react-icons/hi";
 
-const SingleEvent = () => {
-  const router = useRouter();
-  const queryId = router.query.singleEvent;
-  const dummy = DUMMY_EVENTS;
-  const [data, setData] = useState([])
-  
-  
-  useEffect(() => {
-    if (router.isReady) {
-        const event = dummy.find((element) => element.id === Number(queryId)) || [];
-        setData(event)
-      }             
-    },[router.isReady])
-    
-    if (data.length === 0) {
-      return <Text>No event found!</Text>;
-    }
-
-  const { date } = data;
-
+const SingleEvent = (props) => {
+  const { description, date, image, location, title } = props.singleEvent;
   const readableDate = new Date(date).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
@@ -62,8 +43,8 @@ const SingleEvent = () => {
         alignItems="center"
       >
         <Image
-          src={data.image}
-          alt={data.title}
+          src={image}
+          alt={title}
           boxSize="15rem"
           objectFit="cover"
           borderRadius="full"
@@ -82,7 +63,7 @@ const SingleEvent = () => {
             <Box>
               <HiOutlineLocationMarker color="#81E6D9" size="24" />
               <Text mt="0.5rem" color="teal.200">
-                {data.location}
+                {location}
               </Text>
             </Box>
           </Stack>
@@ -91,12 +72,35 @@ const SingleEvent = () => {
       <Center>
         <Container w="45rem">
           <Text mt="2rem" align="center">
-            {data.description}
+            {description}
           </Text>
         </Container>
       </Center>
     </>
   );
 };
+
+export async function getStaticProps(context) {
+  const eventId = context.params.singleEvent;
+  const singleEvent = await getEventById(Number(eventId));
+
+  return {
+    props: {
+      singleEvent: singleEvent,
+    },
+  };
+}
+export async function getStaticPaths() {
+  const allEvents = await getAllEvents();
+  const paths = allEvents.map((event) => {
+    const id = event.id;
+    const stringId = id.toString();
+    return { params: { singleEvent: stringId } };
+  });
+  return {
+    paths: paths,
+    fallback: false,
+  };
+}
 
 export default SingleEvent;
