@@ -24,7 +24,7 @@ export function getEventById(id) {
 }
 
 
-export const DUMMY_EVENTS = [
+export const DUMMY_EVENTS =   [
   {
     id: 1,
     title: "Digitized analyzing help-desk",

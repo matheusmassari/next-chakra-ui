@@ -11,6 +11,7 @@ const AllEvents = () => {
     const fullPath = `/events/${year}/${month}`
     router.push(fullPath)  
   };
+  
   return (
     <>
       <SearchEvents onSearch={findEventsHandler} />
