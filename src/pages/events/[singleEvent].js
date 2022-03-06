@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import { getEventById, getAllEvents } from "../../../helpers/api-utils";
 import { FaRegCalendarMinus } from "react-icons/fa";
 import { HiOutlineLocationMarker } from "react-icons/hi";
@@ -22,6 +23,11 @@ const SingleEvent = (props) => {
 
   return (
     <>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Center w="100%" h="25vh" bgGradient="linear(to-tr, green.200, teal.600)">
         <Text
           fontSize="6xl"
