@@ -1,8 +1,8 @@
 import React from "react";
 import { Text, Center, Spinner, Button } from "@chakra-ui/react";
 import Link from "next/link";
-import { getFilteredEvents } from "../../../helpers/api-utils";
-import EventList from "../../../components/events/EventList";
+import { getFilteredEvents } from "../../helpers/api-utils";
+import EventList from "../../components/Events/EventList";
 
 const FilteredEventsPage = (props) => {
   const { filteredEvents } = props;

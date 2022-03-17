@@ -1,6 +1,6 @@
 import React from "react";
 import Head from "next/head";
-import { getEventById, getAllEvents } from "../../../helpers/api-utils";
+import { getEventById, getAllEvents } from "../../helpers/api-utils";
 import { FaRegCalendarMinus } from "react-icons/fa";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import {

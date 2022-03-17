@@ -1,6 +1,6 @@
 import Head from "next/head";
-import EventList from "../../components/events/EventList";
-import { getFeaturedEvents, getAllEvents } from "../../helpers/api-utils";
+import EventList from "../components/Events/EventList";
+import { getFeaturedEvents, getAllEvents } from "../helpers/api-utils";
 
 export default function Home(props) {
   return (
