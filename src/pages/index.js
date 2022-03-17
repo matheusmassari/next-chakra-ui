@@ -1,6 +1,7 @@
 import Head from "next/head";
 import EventList from "../components/Events/EventList";
 import { getFeaturedEvents, getAllEvents } from "../helpers/api-utils";
+import RegistroNovidades from "../components/Form/RegistroNovidades";
 
 export default function Home(props) {
   return (
@@ -11,6 +12,7 @@ export default function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
+        <RegistroNovidades />
         <EventList events={props.featuredEvents} />
       </div>
     </>
