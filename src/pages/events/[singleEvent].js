@@ -12,6 +12,7 @@ import {
     Stack,
     Container,
 } from "@chakra-ui/react";
+import FormComentarios from "../../components/Form/Comentarios";
 
 const SingleEvent = (props) => {
     const { description, date, image, location, title } = props.singleEvent;
@@ -89,7 +90,7 @@ const SingleEvent = (props) => {
                     </Text>
                 </Container>
             </Center>
-            
+            <FormComentarios />
         </>
     );
 };
