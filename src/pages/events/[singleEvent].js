@@ -15,12 +15,13 @@ import {
 import FormComentarios from "../../components/Form/Comentarios";
 
 const SingleEvent = (props) => {
-    const { description, date, image, location, title } = props.singleEvent;
+    const { description, date, image, location, title, id } = props.singleEvent;
     const readableDate = new Date(date).toLocaleDateString("en-US", {
         day: "numeric",
         month: "long",
         year: "numeric",
     });
+    const eventId = id;
 
     return (
         <>
@@ -90,7 +91,7 @@ const SingleEvent = (props) => {
                     </Text>
                 </Container>
             </Center>
-            <FormComentarios />
+            <FormComentarios eventId={eventId} />
         </>
     );
 };
