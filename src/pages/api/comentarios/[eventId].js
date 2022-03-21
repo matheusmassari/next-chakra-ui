@@ -22,8 +22,7 @@ function handler(req, res) {
             email,
             name,
             text,
-        };
-        console.log(newComment); //LOG
+        };        
 
         res.status(201).json({
             message: "Added comment.",

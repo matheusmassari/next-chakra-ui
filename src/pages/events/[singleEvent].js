@@ -12,7 +12,7 @@ import {
     Stack,
     Container,
 } from "@chakra-ui/react";
-import FormComentarios from "../../components/Form/Comentarios";
+import FormComentarios from "../../components/Form/CommentsForm";
 
 const SingleEvent = (props) => {
     const { description, date, image, location, title, id } = props.singleEvent;

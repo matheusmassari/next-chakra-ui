@@ -35,24 +35,35 @@ const schema = yup
     })
     .required();
 
-const FormComentarios = ({eventId}) => {    
+const FormComentarios = ({ eventId }) => {
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm({ resolver: yupResolver(schema) });
+
     const [toggleComments, setToggleComments] = useState(false);
+    const [comments, setComments] = useState([]);
 
     const sendCommentHandler = (data) => {
-        console.log(data);            
+        console.log(data);
         axios
             .post(`/api/comentarios/${eventId}`, {
                 email: data.email,
                 name: data.name,
                 text: data.text,
             })
-            .then((response) => console.log(response));        
+            .then((response) => console.log(response));
     };
+
+    function setAndGetToggleComments() {
+        setToggleComments(!toggleComments);
+        if (!toggleComments) {
+            axios
+                .get(`/api/comentarios/${eventId}`)
+                .then(({ data: { comments } }) => setComments(comments));
+        }
+    }    
 
     return (
         <Center mt="4rem">
@@ -63,9 +74,7 @@ const FormComentarios = ({eventId}) => {
                     mb="1rem"
                     variant="outline"
                     colorScheme="teal"
-                    onClick={() => {
-                        setToggleComments(!toggleComments);
-                    }}
+                    onClick={() => setAndGetToggleComments()}
                 >
                     {toggleComments ? "Hide comments" : "Show comments"}
                 </Button>
