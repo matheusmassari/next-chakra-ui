@@ -1,7 +1,6 @@
 import { getAllEvents } from "../../helpers/api-utils";
 import EventList from "../../components/Events/EventList";
 import SearchEvents from "../../components/Events/SearchEvents";
-
 import { useRouter } from "next/router";
 import Head from "next/head";
 

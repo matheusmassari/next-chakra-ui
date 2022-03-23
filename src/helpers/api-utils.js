@@ -1,5 +1,5 @@
+
 const axios = require("axios");
-import { MongoClient } from "mongodb";
 
 export async function getAllEvents() {
     try {
@@ -25,7 +25,7 @@ export async function getAllDocuments(client, collection, sort, filter = {}) {
         .find(filter)
         .sort(sort)
         .toArray();
-
+        
     return documents;
 }
 

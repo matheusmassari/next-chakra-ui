@@ -1,16 +1,21 @@
 // -> rota:  api/comments/id-de-exemplo
-import { MongoClient } from "mongodb";
 import { getAllDocuments } from "../../../helpers/api-utils";
+import { connectDatabase, insertDocument } from "../../../helpers/db-utils";
 
 async function handler(req, res) {
     const eventId = req.query.eventId;
 
-    const client = await MongoClient.connect(
-        `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@nimbus.duqgg.mongodb.net/events?retryWrites=true&w=majority`
-    );
+    let client;
+    try {
+        client = await connectDatabase("events");
+    } catch (error) {
+        res.status(500).json({ message: "Connecting to the database failed!" });
+    }
 
+    /* POST */
     if (req.method === "POST") {
         const { email, name, text } = req.body;
+        /* === Server-side validation === */
         if (
             !email.includes("@") ||
             !name ||
@@ -19,8 +24,10 @@ async function handler(req, res) {
             text.trim() === ""
         ) {
             res.status(422).json({ message: "Invalid input." });
+            client.close();
             return;
         }
+        /* === Server-side validation === */
 
         const newComment = {
             email,
@@ -29,35 +36,37 @@ async function handler(req, res) {
             eventId,
         };
 
-        const db = client.db();
-
-        const result = await db.collection("comments").insertOne(newComment);
-
-        newComment.id = result.insertedId;
-
-        res.status(201).json({
-            message: "Added comment.",
-            comment: newComment,
-        });
+        let result;
+        try {
+            result = await insertDocument(client, "comments", newComment);
+            newComment._id = result.insertedId;
+            res.status(201).json({
+                message: "Added comment.",
+                comment: newComment,
+            });
+        } catch (error) {
+            res.status(500).json({ message: "Inserting comment failed!" });
+            client.close();
+        }
     }
-    if (req.method === "GET") {
-        const db = client.db();
 
+    /* GET */
+    if (req.method === "GET") {        
+        const db = client.db();
+        try {
         const documents = await getAllDocuments(
             db,
             "comments",
             { _id: -1 },
             { eventId: eventId }
-        );
-        // await db
-        //     .collection("comments")
-        //     .find()
-        //     .sort({ _id: -1 })
-        //     .toArray();
-
+        );        
         res.status(200).json({ comments: documents });
+        } catch (error) {
+            res.status(500).json({
+                message: "Could not get comments for this section!",
+            });
+        }
     }
-
     client.close();
 }
 

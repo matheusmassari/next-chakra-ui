@@ -1,21 +1,35 @@
-import { MongoClient } from "mongodb";
+import {connectDatabase, insertDocument} from "../../helpers/db-utils"
 
 async function handler(req, res) {
     if (req.method === "POST") {
         const userEmail = req.body.email;
 
+        // === Server Side Validation === //
         if (!userEmail || !userEmail.includes("@")) {
             res.status(422).json({ message: "Invalid email adress" });
             return;
         }
-        
-        const client = await MongoClient.connect(
-            `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@nimbus.duqgg.mongodb.net/nimbus?retryWrites=true&w=majority`
-        );
-        const db = client.db();
+        // === Server Side Validation === //
 
-        await db.collection("emails").insertOne({ email: userEmail });
-        client.close();
+        let client;
+
+        try {
+            client = await connectDatabase("nimbus");
+        } catch (error) {
+            res.status(500).json({
+                message: "Connecting to the database failed!",
+            });
+            return;
+        }
+
+        try {
+            await insertDocument(client, "emails", { email: userEmail });
+            client.close();
+        } catch (error) {
+            res.status(500).json({
+                message: "Inserting data failed!",
+            });
+        }
 
         res.status(201).json({ message: "Signed up!" });
     }
