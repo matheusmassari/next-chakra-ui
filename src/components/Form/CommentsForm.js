@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import CommentsList from "./CommentsList";
 
 const schema = yup
     .object({
@@ -46,7 +47,6 @@ const FormComentarios = ({ eventId }) => {
     const [comments, setComments] = useState([]);
 
     const sendCommentHandler = (data) => {
-        console.log(data);
         axios
             .post(`/api/comentarios/${eventId}`, {
                 email: data.email,
@@ -63,7 +63,7 @@ const FormComentarios = ({ eventId }) => {
                 .get(`/api/comentarios/${eventId}`)
                 .then(({ data: { comments } }) => setComments(comments));
         }
-    }    
+    }
 
     return (
         <Center mt="4rem">
@@ -79,79 +79,87 @@ const FormComentarios = ({ eventId }) => {
                     {toggleComments ? "Hide comments" : "Show comments"}
                 </Button>
                 {toggleComments && (
-                    <Box
-                        w="60rem"
-                        h="fit-content"
-                        bgColor="gray.800"
-                        borderRadius="8px"
-                        padding="1rem"
-                    >
-                        <form onSubmit={handleSubmit(sendCommentHandler)}>
-                            <Flex>
-                                <FormControl>
-                                    <FormLabel htmlFor="email" color="white">
-                                        Your email:
+                    <>
+                        <CommentsList comments={comments} />
+                        <Box
+                            w="60rem"
+                            h="fit-content"
+                            bgColor="gray.800"
+                            borderRadius="8px"
+                            padding="1rem"
+                        >
+                            <form onSubmit={handleSubmit(sendCommentHandler)}>
+                                <Flex>
+                                    <FormControl>
+                                        <FormLabel
+                                            htmlFor="email"
+                                            color="white"
+                                        >
+                                            Your email:
+                                        </FormLabel>
+                                        <Input
+                                            id="email"
+                                            type="email"
+                                            bgColor="white"
+                                            placeholder="fulanodetal@gmail.com"
+                                            {...register("email", {
+                                                required:
+                                                    "This field is required",
+                                            })}
+                                        />
+                                        <Text color="yellow.500">
+                                            {errors.email?.message}
+                                        </Text>
+                                    </FormControl>
+                                    <FormControl ml="1rem">
+                                        <FormLabel htmlFor="name" color="white">
+                                            Your name:
+                                        </FormLabel>
+                                        <Input
+                                            id="name"
+                                            type="text"
+                                            bgColor="white"
+                                            placeholder="fulanodetal@gmail.com"
+                                            {...register("name", {
+                                                required:
+                                                    "This field is required",
+                                            })}
+                                        />
+                                        <Text color="yellow.500">
+                                            {errors.name?.message}
+                                        </Text>
+                                    </FormControl>
+                                </Flex>
+                                <FormControl mt="1rem">
+                                    <FormLabel htmlFor="text" color="white">
+                                        Your comment:
                                     </FormLabel>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        bgColor="white"
-                                        placeholder="fulanodetal@gmail.com"
-                                        {...register("email", {
-                                            required: "This field is required",
-                                        })}
-                                    />
-                                    <Text color="yellow.500">
-                                        {errors.email?.message}
-                                    </Text>
-                                </FormControl>
-                                <FormControl ml="1rem">
-                                    <FormLabel htmlFor="name" color="white">
-                                        Your name:
-                                    </FormLabel>
-                                    <Input
-                                        id="name"
+                                    <Textarea
+                                        id="text"
                                         type="text"
                                         bgColor="white"
                                         placeholder="fulanodetal@gmail.com"
-                                        {...register("name", {
+                                        {...register("text", {
                                             required: "This field is required",
                                         })}
                                     />
                                     <Text color="yellow.500">
-                                        {errors.name?.message}
+                                        {errors.text?.message}
                                     </Text>
                                 </FormControl>
-                            </Flex>
-                            <FormControl mt="1rem">
-                                <FormLabel htmlFor="text" color="white">
-                                    Your comment:
-                                </FormLabel>
-                                <Textarea
-                                    id="text"
-                                    type="text"
-                                    bgColor="white"
-                                    placeholder="fulanodetal@gmail.com"
-                                    {...register("text", {
-                                        required: "This field is required",
-                                    })}
-                                />
-                                <Text color="yellow.500">
-                                    {errors.text?.message}
-                                </Text>
-                            </FormControl>
-                            <Center mt="1rem">
-                                <Button
-                                    type="submit"
-                                    colorScheme="teal"
-                                    m="0 auto"
-                                    isLoading={isSubmitting}
-                                >
-                                    Register
-                                </Button>
-                            </Center>
-                        </form>
-                    </Box>
+                                <Center mt="1rem">
+                                    <Button
+                                        type="submit"
+                                        colorScheme="teal"
+                                        m="0 auto"
+                                        isLoading={isSubmitting}
+                                    >
+                                        Register
+                                    </Button>
+                                </Center>
+                            </form>
+                        </Box>
+                    </>
                 )}
             </Flex>
         </Center>

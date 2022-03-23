@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
     Text,
@@ -9,22 +9,30 @@ import {
     Button,
     Box,
     Flex,
+    Alert,
+    AlertTitle,
+    CloseButton,
+    AlertIcon,
+    AlertDescription,
 } from "@chakra-ui/react";
 import axios from "axios";
 
 const RegistroNovidades = () => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm();
+    const [isLoading, setIsLoading] = useState(false);
+    const [feedbackMessage, setFeedbackMessage] = useState("");
+
+    const { register, handleSubmit } = useForm();
 
     const onSubmit = (data) => {
+        setIsLoading(true);
         axios
             .post("/api/novidades", {
                 email: data.email,
             })
-            .then((response) => console.log(response));
+            .then((response) => {
+                setIsLoading(false);
+                setFeedbackMessage(response.data.message);
+            });
     };
 
     return (
@@ -47,13 +55,30 @@ const RegistroNovidades = () => {
                             <Button
                                 type="submit"
                                 colorScheme="teal"
-                                ml="1rem"                                
-                                isLoading={isSubmitting}
+                                ml="1rem"
+                                isLoading={isLoading}
                             >
                                 Register
                             </Button>
                         </Flex>
                     </FormControl>
+                    {feedbackMessage && (
+                        <Alert status="success" mt="1rem" borderRadius="10px">
+                            <AlertIcon />
+                            <Box flex="1">
+                                <AlertTitle>Success!</AlertTitle>
+                                <AlertDescription display="block">
+                                    {feedbackMessage}
+                                </AlertDescription>
+                            </Box>
+                            <CloseButton
+                                position="absolute"
+                                right="8px"
+                                top="8px"
+                                onClick={() => setFeedbackMessage("")}
+                            />
+                        </Alert>
+                    )}
                 </Box>
             </form>
         </Center>
