@@ -20,6 +20,7 @@ export default function Home(props) {
 }
 
 export async function getStaticProps() {
+  console.log(getFeaturedEvents)
   const featuredEvents = await getFeaturedEvents();
   
 

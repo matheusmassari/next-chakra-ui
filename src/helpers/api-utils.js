@@ -30,7 +30,7 @@ export async function getAllDocuments(client, collection, sort, filter = {}) {
 }
 
 export async function getFeaturedEvents() {
-    const allEvents = await getAllEvents();
+    const allEvents = await getAllEvents();    
     return allEvents.filter((event) => event.isFeatured);
 }
 

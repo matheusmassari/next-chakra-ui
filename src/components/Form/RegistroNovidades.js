@@ -18,6 +18,7 @@ import {
 import axios from "axios";
 
 const RegistroNovidades = () => {
+    const [disable, setDisable] = useState(true)
     const [isLoading, setIsLoading] = useState(false);
     const [feedbackMessage, setFeedbackMessage] = useState("");
 
@@ -57,6 +58,7 @@ const RegistroNovidades = () => {
                                 colorScheme="teal"
                                 ml="1rem"
                                 isLoading={isLoading}
+                                isDisabled={disable}
                             >
                                 Register
                             </Button>
